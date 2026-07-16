@@ -2,11 +2,11 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ExternalLink,
-  Heart,
   ImageIcon,
   ShieldCheck,
 } from "lucide-react";
 
+import { FavoriteButton } from "@/components/shared/favorite-button";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -64,13 +64,11 @@ export function ProductDetailsPage({ product }: ProductDetailsPageProps) {
               <span className="inline-flex rounded-full border border-primary/20 bg-primary/[0.09] px-3 py-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-primary">
                 {product.category}
               </span>
-              <button
-                type="button"
-                aria-label={`Add ${product.title} to favorites`}
-                className="flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.035] text-zinc-500 outline-none transition-[background-color,border-color,color,transform] duration-300 hover:border-primary/30 hover:bg-primary/[0.12] hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/70 active:scale-90"
-              >
-                <Heart aria-hidden="true" className="size-4" strokeWidth={1.8} />
-              </button>
+              <FavoriteButton
+                productId={product.id}
+                title={product.title}
+                variant="details"
+              />
             </div>
 
             <div className="mt-8 flex items-center gap-2 text-xs font-medium text-primary">
