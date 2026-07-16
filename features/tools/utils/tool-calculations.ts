@@ -59,26 +59,3 @@ export function convertCurrency(
     ? amount * cnyToAznRate
     : amount / cnyToAznRate;
 }
-
-export function validateTrackingNumber(rawValue: string) {
-  const normalizedValue = rawValue.trim();
-
-  if (!normalizedValue) {
-    return {
-      error: "Tracking number is required.",
-      value: null,
-    };
-  }
-
-  if (!/^[A-Za-z0-9][A-Za-z0-9-]{5,39}$/.test(normalizedValue)) {
-    return {
-      error: "Enter a valid tracking number using 6–40 letters, numbers, or hyphens.",
-      value: null,
-    };
-  }
-
-  return {
-    error: null,
-    value: normalizedValue.toUpperCase(),
-  };
-}

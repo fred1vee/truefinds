@@ -5,28 +5,38 @@ import { PackageSearch, Radio } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import { validateTrackingNumber } from "../utils/tool-calculations";
+import { trackParcel } from "../actions/track-parcel";
+import type { TrackingServiceResult } from "../services/tracking/tracking-service";
 import { ToolCard } from "./tool-card";
 import { ToolInput } from "./tool-input";
 
 export function ParcelTracking() {
   const [trackingNumber, setTrackingNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [submittedNumber, setSubmittedNumber] = useState<string | null>(null);
+  const [result, setResult] = useState<TrackingServiceResult | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setIsSubmitting(true);
 
-    const validation = validateTrackingNumber(trackingNumber);
+    try {
+      const trackingResult = await trackParcel(trackingNumber);
 
-    if (validation.error) {
-      setError(validation.error);
-      setSubmittedNumber(null);
-      return;
+      if (trackingResult.status === "invalid") {
+        setError(trackingResult.message);
+        setResult(null);
+        return;
+      }
+
+      setError(null);
+      setResult(trackingResult);
+    } catch {
+      setError("Unable to submit the tracking request. Please try again.");
+      setResult(null);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setError(null);
-    setSubmittedNumber(validation.value);
   }
 
   return (
@@ -52,21 +62,22 @@ export function ParcelTracking() {
           value={trackingNumber}
           onChange={(event) => {
             setTrackingNumber(event.target.value);
-            setSubmittedNumber(null);
+            setResult(null);
             setError(null);
           }}
         />
         <Button
           type="submit"
           size="lg"
+          disabled={isSubmitting}
           className="h-12 w-full rounded-xl bg-primary px-6 text-sm shadow-[0_12px_32px_rgba(139,92,246,0.22)] hover:bg-primary/90 lg:w-auto"
         >
           <Radio aria-hidden="true" className="size-4" />
-          Track
+          {isSubmitting ? "Checking..." : "Track"}
         </Button>
       </form>
 
-      {submittedNumber ? (
+      {result ? (
         <div
           aria-live="polite"
           className="mt-5 rounded-2xl border border-primary/20 bg-primary/[0.08] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_0_28px_rgba(139,92,246,0.08)]"
@@ -81,11 +92,10 @@ export function ParcelTracking() {
             </div>
             <div>
               <p className="text-sm font-semibold text-zinc-100">
-                Live tracking integration is coming
+                Tracking unavailable
               </p>
               <p className="mt-1.5 text-xs leading-5 text-zinc-500">
-                {submittedNumber} is ready. Real carrier updates will appear
-                here after the live tracking service is connected.
+                {result.message}
               </p>
             </div>
           </div>
