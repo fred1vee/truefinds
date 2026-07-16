@@ -11,6 +11,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { useAuthSessionState } from "@/components/auth/auth-session-provider";
+import { createLoginURL } from "@/lib/auth-callback";
 import { cn } from "@/lib/utils";
 
 type NavigationItem = {
@@ -29,6 +31,7 @@ const navigationItems: NavigationItem[] = [
 
 export function BottomNavigation() {
   const pathname = usePathname();
+  const { isAuthenticated } = useAuthSessionState();
 
   return (
     <nav
@@ -37,12 +40,16 @@ export function BottomNavigation() {
     >
       <ul className="grid grid-cols-5 gap-1">
         {navigationItems.map(({ href, icon: Icon, label }) => {
-          const isActive = pathname === href;
+          const isActive =
+            pathname === href ||
+            (href !== "/" && pathname.startsWith(`${href}/`));
+          const destination =
+            href === "/" || isAuthenticated ? href : createLoginURL(href);
 
           return (
             <li key={href}>
               <Link
-                href={href}
+                href={destination}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-[1.25rem] border border-transparent px-1 text-[0.625rem] font-medium outline-none transition-[color,background-color,border-color,box-shadow,transform] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-primary/70 sm:min-h-16 sm:text-xs",
