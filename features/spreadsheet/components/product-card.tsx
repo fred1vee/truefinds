@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowUpRight, Heart, ImageIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -8,6 +9,7 @@ type ProductCardProps = {
   marketplace: string;
   price: string;
   priceCny: string;
+  productId: string;
   title: string;
 };
 
@@ -16,6 +18,7 @@ export function ProductCard({
   marketplace,
   price,
   priceCny,
+  productId,
   title,
 }: ProductCardProps) {
   return (
@@ -69,8 +72,8 @@ export function ProductCard({
               </span>
             </div>
           </div>
-          <button
-            type="button"
+          <Link
+            href={`/spreadsheet/${productId}`}
             aria-label={`Open ${title}`}
             className={cn(
               buttonVariants({ size: "sm" }),
@@ -79,7 +82,7 @@ export function ProductCard({
           >
             Open
             <ArrowUpRight aria-hidden="true" className="size-3.5" />
-          </button>
+          </Link>
         </div>
       </div>
     </article>

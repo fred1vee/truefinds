@@ -4,65 +4,7 @@ import { CategoryFilter } from "./category-filter";
 import { ProductCard } from "./product-card";
 import { SearchBar } from "./search-bar";
 import { UpdatedBadge } from "./updated-badge";
-
-const products = [
-  {
-    category: "Hoodies",
-    marketplace: "Pinduoduo",
-    price: "24.90 AZN",
-    priceCny: "¥103.00",
-    title: "Product placeholder 01",
-  },
-  {
-    category: "T-Shirts",
-    marketplace: "Pinduoduo",
-    price: "12.50 AZN",
-    priceCny: "¥51.80",
-    title: "Product placeholder 02",
-  },
-  {
-    category: "Pants",
-    marketplace: "Pinduoduo",
-    price: "21.90 AZN",
-    priceCny: "¥90.60",
-    title: "Product placeholder 03",
-  },
-  {
-    category: "Shoes",
-    marketplace: "Pinduoduo",
-    price: "32.00 AZN",
-    priceCny: "¥132.40",
-    title: "Product placeholder 04",
-  },
-  {
-    category: "Accessories",
-    marketplace: "Pinduoduo",
-    price: "8.90 AZN",
-    priceCny: "¥36.80",
-    title: "Product placeholder 05",
-  },
-  {
-    category: "Jackets",
-    marketplace: "Pinduoduo",
-    price: "38.50 AZN",
-    priceCny: "¥159.30",
-    title: "Product placeholder 06",
-  },
-  {
-    category: "Hoodies",
-    marketplace: "Pinduoduo",
-    price: "26.90 AZN",
-    priceCny: "¥111.30",
-    title: "Product placeholder 07",
-  },
-  {
-    category: "Shoes",
-    marketplace: "Pinduoduo",
-    price: "29.90 AZN",
-    priceCny: "¥123.70",
-    title: "Product placeholder 08",
-  },
-];
+import { spreadsheetProducts } from "../data/products";
 
 export function SpreadsheetPage() {
   return (
@@ -103,8 +45,12 @@ export function SpreadsheetPage() {
 
       <section className="mt-7 sm:mt-9" aria-label="Verified product finds">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.title} {...product} />
+          {spreadsheetProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              {...product}
+              productId={product.id}
+            />
           ))}
         </div>
       </section>
