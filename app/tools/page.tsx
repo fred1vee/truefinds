@@ -1,13 +1,5 @@
-import { Wrench } from "lucide-react";
+import { ToolsPage } from "@/features/tools";
 
-import { PageHeading } from "@/components/layout/page-heading";
-
-export default function ToolsPage() {
-  return (
-    <PageHeading
-      icon={Wrench}
-      title="Tools"
-      description="Temporary tools content will appear here."
-    />
-  );
+export default function ToolsRoute() {
+  return <ToolsPage />;
 }
